@@ -1,11 +1,14 @@
 import urllib.request
-import re time
+import re
+import time
 from lib import I2C_LCD_driver
 
 sleep = 3600
 
 x=0
 link = 'https://geoegl.msp.gouv.qc.ca/adnv2/tableau-region-simple.php?id=13&type_rapport=ADMIN'
+
+mylcd = I2C_LCD_driver.lcd()
 
 try :
     while (True):
@@ -22,17 +25,24 @@ try :
                 niveau = re.findall("[0-9 ]*,[0-9]{2}",i)
                 for y in niveau:
                         if x == 0:
-                                SIM = ("SIM debit : "+y+" m³/s")
+                                SIM = y
+                                print (("SIM deb: "+ SIM +" m³/s"))
                         elif x==1:
-                                debit = ("Debit: "+y+" m³/s")
+                                debit = y
+                                print ("Deb: "+ debit +" m³/s")
                         else:
-                                niveau ("Niveau : "+y+" m (normal - 20m)")
+                                niveau = y
+                                print ("Niv: "+ y +" m (normal - 20m)")
                         x+=1
 
-        print (SIM + "\n" + debit + "\n" + niveau + "\n")
-        mylcd = I2C_LCD_driver.lcd()
-        mylcd.lcd_display_string("Hello World!", 1)
-        time.sleep(5)
+        #print (SIM + "\n" + debit + "\n" + niveau + "\n")
+        for z in range(180):
+          mylcd.lcd_display_string(niveau + "m (20m)", 1)
+          mylcd.lcd_display_string(debit + "m3/s     ", 2)
+          time.sleep(5)
+          mylcd.lcd_display_string(SIM + "m3/s SIM", 2)
+          time.sleep(5)
+          z+=1
         #time.sleep(sleep)
 
 except KeyboardInterrupt:
