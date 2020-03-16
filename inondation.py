@@ -3,10 +3,7 @@ import re
 import time
 from lib import I2C_LCD_driver
 
-sleep = 3600
-
-x=0
-link = 'https://geoegl.msp.gouv.qc.ca/adnv2/tableau-region-simple.php?id=13&type_rapport=ADMIN'
+link = 'https://geoegl.msp.gouv.qc.ca/libcommunes/MSPwidgets/hydrogramme/index.php?station=043301&type1=niveau&type2=debit'
 
 mylcd = I2C_LCD_driver.lcd()
 
@@ -19,31 +16,53 @@ try :
 
         search = str(s,"utf-8")
 
-        search=search.strip("\r\t\n")
-        search = re.findall("(Rivi.re des Prairies[\s<>/a-z='ÀéA-Zê()0-9.#\*,]*)",search)
-        for i in search:
-                niveau = re.findall("[0-9 ]*,[0-9]{2}",i)
-                for y in niveau:
-                        if x == 0:
-                                SIM = y
-                                print (("SIM deb: "+ SIM +" m³/s"))
-                        elif x==1:
-                                debit = y
-                                print ("Deb: "+ debit +" m³/s")
-                        else:
-                                niveau = y
-                                print ("Niv: "+ y +" m (normal - 20m)")
-                        x+=1
+        #ETAT
+        etat = re.findall("(État[\s<>/-ÀA-Z\&;:,]*)",search)
+        etat = (etat[1])
+        etat = str(etat[16:])
+        etat = etat.split('<')
+        etat = str(etat[0])
+        print (etat)
+
+        #debit
+        debit = re.findall("(Débit[\s<>/-ÀA-Z\&,]*)",search)
+        debit = (debit[0])
+        debit = str(debit[18:])
+        debit = debit.split('m')
+        debit = str(debit[0])
+        print (debit)
+
+        #SIM
+        SIM = re.findall("(SIM[\s<*>/-ÀA-Z\&,]*)",search)
+        SIM = (SIM[0])
+        SIM = str(SIM[29:])
+        SIM = SIM.split('\t')
+        SIM = str(SIM[0])
+        SIM = SIM.split('m')
+        SIM = str(SIM[0])
+        SIM = SIM[:-1]
+        print (SIM)
+
+        #NIVEAU
+        niveau = re.findall("(Niveau[\s<*>/-ÀA-Z\&,]*)",search)
+        niveau = str(niveau[0])
+        niveau = niveau[19:]
+        niveau = niveau.split('<')
+        niveau = str(niveau[0])
+        print (niveau)
+
+        print ("\n")
 
         #print (SIM + "\n" + debit + "\n" + niveau + "\n")
-        for z in range(180):
-          mylcd.lcd_display_string(niveau + "m (20m)", 1)
-          mylcd.lcd_display_string(debit + "m3/s     ", 2)
+        for z in range(36):
+          mylcd.lcd_display_string("Etat: "+etat, 1)
+          mylcd.lcd_display_string(debit+"m3/s      ", 2)
           time.sleep(5)
-          mylcd.lcd_display_string(SIM + "m3/s SIM", 2)
+          mylcd.lcd_display_string("SIM:"+SIM +"m3/s", 2)
+          time.sleep(5)
+          mylcd.lcd_display_string(niveau+"         ", 2)
           time.sleep(5)
           z+=1
-        #time.sleep(sleep)
 
 except KeyboardInterrupt:
     print("\nCtrl-C pressed")
