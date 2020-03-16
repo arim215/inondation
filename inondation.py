@@ -54,7 +54,7 @@ try :
         print ("\n")
 
         #print (SIM + "\n" + debit + "\n" + niveau + "\n")
-        for z in range(36):
+        for z in range(180):
           mylcd.lcd_display_string("Etat: "+etat, 1)
           mylcd.lcd_display_string(debit+"m3/s      ", 2)
           time.sleep(5)
