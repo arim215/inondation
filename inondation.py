@@ -7,63 +7,46 @@ link = 'https://geoegl.msp.gouv.qc.ca/libcommunes/MSPwidgets/hydrogramme/index.p
 
 mylcd = I2C_LCD_driver.lcd()
 
-try :
-    while (True):
-        
-        with urllib.request.urlopen(link) as url:
-            s = url.read()
+with urllib.request.urlopen(link) as url:
+  s = url.read()
+search = str(s,"utf-8")
 
+#ETAT
+etat = re.findall("(État[\s<>/-ÀA-Z\&;:,]*)",search)
+etat = (etat[1])
+etat = str(etat[16:])
+etat = etat.split('<')
+etat = str(etat[0])
+print (etat)
 
-        search = str(s,"utf-8")
+#debit
+debit = re.findall("(Débit[\s<>/-ÀA-Z\&,]*)",search)
+debit = (debit[0])
+debit = str(debit[18:])
+debit = debit.split('m')
+debit = str(debit[0])
+print (debit)
 
-        #ETAT
-        etat = re.findall("(État[\s<>/-ÀA-Z\&;:,]*)",search)
-        etat = (etat[1])
-        etat = str(etat[16:])
-        etat = etat.split('<')
-        etat = str(etat[0])
-        print (etat)
+#SIM
+SIM = re.findall("(SIM[\s<*>/-ÀA-Z\&,]*)",search)
+SIM = (SIM[0])
+SIM = str(SIM[29:])
+SIM = SIM.split('\t')
+SIM = str(SIM[0])
+SIM = SIM.split('m')
+SIM = str(SIM[0])
+SIM = SIM[:-1]
+print (SIM)
 
-        #debit
-        debit = re.findall("(Débit[\s<>/-ÀA-Z\&,]*)",search)
-        debit = (debit[0])
-        debit = str(debit[18:])
-        debit = debit.split('m')
-        debit = str(debit[0])
-        print (debit)
+#NIVEAU
+niveau = re.findall("(Niveau[\s<*>/-ÀA-Z\&,]*)",search)
+niveau = str(niveau[0])
+niveau = niveau[19:]
+niveau = niveau.split('<')
+niveau = str(niveau[0])
+print (niveau)
 
-        #SIM
-        SIM = re.findall("(SIM[\s<*>/-ÀA-Z\&,]*)",search)
-        SIM = (SIM[0])
-        SIM = str(SIM[29:])
-        SIM = SIM.split('\t')
-        SIM = str(SIM[0])
-        SIM = SIM.split('m')
-        SIM = str(SIM[0])
-        SIM = SIM[:-1]
-        print (SIM)
+print ("\n")
 
-        #NIVEAU
-        niveau = re.findall("(Niveau[\s<*>/-ÀA-Z\&,]*)",search)
-        niveau = str(niveau[0])
-        niveau = niveau[19:]
-        niveau = niveau.split('<')
-        niveau = str(niveau[0])
-        print (niveau)
-
-        print ("\n")
-
-        #print (SIM + "\n" + debit + "\n" + niveau + "\n")
-        for z in range(180):
-          mylcd.lcd_display_string("Etat: "+etat, 1)
-          mylcd.lcd_display_string(debit+"m3/s      ", 2)
-          time.sleep(5)
-          mylcd.lcd_display_string("SIM:"+SIM +"m3/s", 2)
-          time.sleep(5)
-          mylcd.lcd_display_string(niveau+"         ", 2)
-          time.sleep(5)
-          z+=1
-
-except KeyboardInterrupt:
-    print("\nCtrl-C pressed")
-    mylcd.lcd_clear()
+mylcd.lcd_display_string(etat+" "+niveau, 1)
+mylcd.lcd_display_string(debit+"m3/s      ", 2)
