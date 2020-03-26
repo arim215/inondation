@@ -10,4 +10,4 @@ change address in the I2C lib file
 
 add to crontab every 15 min
 crontab -e
-*/15 * * * * python /home/pi/inondation/inondation.py
+*/15 * * * * python3 /home/pi/inondation/inondation.py
