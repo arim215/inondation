@@ -7,3 +7,7 @@ sudo apt-get install i2c-tools python-smbus
 
 i2cdetect -y 1
 change address in the I2C lib file
+
+add to crontab every 15 min
+crontab -e
+*/15 * * * * python /home/pi/inondation/inondation.py
