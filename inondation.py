@@ -17,7 +17,8 @@ etat = (etat[1])
 etat = str(etat[16:])
 etat = etat.split('<')
 etat = str(etat[0])
-print (etat)
+etat = str(etat[:7])
+print ("Etat: "+etat)
 
 #debit
 debit = re.findall("(Débit[\s<>/-ÀA-Z\&,]*)",search)
@@ -25,7 +26,7 @@ debit = (debit[0])
 debit = str(debit[18:])
 debit = debit.split('m')
 debit = str(debit[0])
-print (debit)
+print ("Debit: "+debit+"m3/s")
 
 #SIM
 SIM = re.findall("(SIM[\s<*>/-ÀA-Z\&,]*)",search)
@@ -36,7 +37,7 @@ SIM = str(SIM[0])
 SIM = SIM.split('m')
 SIM = str(SIM[0])
 SIM = SIM[:-1]
-print (SIM)
+print ("SIM: "+SIM+"m3/s")
 
 #NIVEAU
 niveau = re.findall("(Niveau[\s<*>/-ÀA-Z\&,]*)",search)
@@ -44,9 +45,10 @@ niveau = str(niveau[0])
 niveau = niveau[19:]
 niveau = niveau.split('<')
 niveau = str(niveau[0])
-print (niveau)
+niveau = niveau[:4]
+print ("Niveau: "+niveau+"m")
 
 print ("\n")
 
-mylcd.lcd_display_string(etat+" "+niveau, 1)
+mylcd.lcd_display_string(etat+" "+niveau+"m", 1)
 mylcd.lcd_display_string(debit+"m3/s      ", 2)
