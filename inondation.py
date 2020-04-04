@@ -17,7 +17,7 @@ etat = (etat[1])
 etat = str(etat[16:])
 etat = etat.split('<')
 etat = str(etat[0])
-etat = str(etat[:7])
+etat = str(etat[:10])
 print ("Etat: "+etat)
 
 #debit
