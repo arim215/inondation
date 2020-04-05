@@ -17,7 +17,7 @@ etat = (etat[1])
 etat = str(etat[16:])
 etat = etat.split('<')
 etat = str(etat[0])
-etat = str(etat[:10])
+etat = str(etat[:9])
 print ("Etat: "+etat)
 
 #debit
@@ -45,7 +45,7 @@ niveau = str(niveau[0])
 niveau = niveau[19:]
 niveau = niveau.split('<')
 niveau = str(niveau[0])
-niveau = niveau[:4]
+niveau = niveau[:5]
 print ("Niveau: "+niveau+"m")
 
 print ("\n")
